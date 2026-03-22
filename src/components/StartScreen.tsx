@@ -1,26 +1,79 @@
-const CATEGORIES = ['S3', 'Lambda', 'DynamoDB', 'SQS', 'SNS', 'API Gateway', 'EC2', 'IAM']
+import { useState } from 'react'
 
-type Props = {
-  onStart: () => void
-  onGenerate: (category: string) => void
-  generating: boolean
+const CATEGORIES = ['すべて', 'S3', 'Lambda', 'DynamoDB', 'SQS', 'SNS', 'API Gateway', 'EC2', 'IAM']
+const DIFFICULTIES = ['すべて', 'easy', 'medium', 'hard'] as const
+
+export type FilterOptions = {
+  category: string
+  difficulty: string
+  shuffle: boolean
 }
 
-export function StartScreen({ onStart, onGenerate, generating }: Props) {
+type Props = {
+  onStart: (filters: FilterOptions) => void
+  onGenerate: (category: string) => void
+  generating: boolean
+  onStats: () => void
+}
+
+export function StartScreen({ onStart, onGenerate, generating, onStats }: Props) {
+  const [category, setCategory] = useState('すべて')
+  const [difficulty, setDifficulty] = useState('すべて')
+  const [shuffle, setShuffle] = useState(false)
+
   return (
     <div className="screen">
       <h1>AWS DVA クイズ</h1>
-      <p>AWS Developer Associate 試験対策クイズです。</p>
-      <button onClick={onStart}>既存の問題でスタート</button>
+
+      <div className="filter-section">
+        <p className="label">カテゴリ</p>
+        <div className="filter-buttons">
+          {CATEGORIES.map((cat) => (
+            <button
+              key={cat}
+              className={category === cat ? 'active' : ''}
+              onClick={() => setCategory(cat)}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        <p className="label">難易度</p>
+        <div className="filter-buttons">
+          {DIFFICULTIES.map((d) => (
+            <button
+              key={d}
+              className={difficulty === d ? 'active' : ''}
+              onClick={() => setDifficulty(d)}
+            >
+              {d}
+            </button>
+          ))}
+        </div>
+
+        <label className="shuffle-label">
+          <input
+            type="checkbox"
+            checked={shuffle}
+            onChange={(e) => setShuffle(e.target.checked)}
+          />
+          シャッフル
+        </label>
+      </div>
+
+      <button onClick={() => onStart({ category, difficulty, shuffle })}>
+        既存の問題でスタート
+      </button>
+      <button onClick={onStats}>統計を見る</button>
+
       <div className="divider">または</div>
+
       <p className="label">AIでカテゴリを選んで問題を生成</p>
       <ul className="category-list">
-        {CATEGORIES.map((cat) => (
+        {CATEGORIES.filter((c) => c !== 'すべて').map((cat) => (
           <li key={cat}>
-            <button
-              onClick={() => onGenerate(cat)}
-              disabled={generating}
-            >
+            <button onClick={() => onGenerate(cat)} disabled={generating}>
               {generating ? '生成中...' : cat}
             </button>
           </li>
