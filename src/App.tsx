@@ -54,7 +54,7 @@ function App() {
     fetchQuizzes()
   }, [])
 
-  const handleStart = ({ category, difficulty, shuffle: doShuffle }: FilterOptions) => {
+  const handleStart = ({ category, difficulty, shuffle: doShuffle, count }: FilterOptions) => {
     let filtered = allQuizzes
     if (category !== 'すべて') filtered = filtered.filter((q) => q.category === category)
     if (difficulty !== 'すべて') filtered = filtered.filter((q) => q.difficulty === difficulty)
@@ -62,7 +62,8 @@ function App() {
       setError('条件に合う問題が見つかりません')
       return
     }
-    setQuizzes(doShuffle ? shuffle(filtered) : filtered)
+    const picked = doShuffle ? shuffle(filtered) : filtered
+    setQuizzes(picked.slice(0, count))
     setCurrent(0)
     setCorrect(0)
     setAnswers([])

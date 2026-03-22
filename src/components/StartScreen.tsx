@@ -2,11 +2,13 @@ import { useState } from 'react'
 
 const CATEGORIES = ['すべて', 'S3', 'Lambda', 'DynamoDB', 'SQS', 'SNS', 'API Gateway', 'EC2', 'IAM']
 const DIFFICULTIES = ['すべて', 'easy', 'medium', 'hard'] as const
+const COUNTS = [1, 2, 3, 5, 10, 20, 30] as const
 
 export type FilterOptions = {
   category: string
   difficulty: string
   shuffle: boolean
+  count: number
 }
 
 type Props = {
@@ -20,6 +22,7 @@ export function StartScreen({ onStart, onGenerate, generating, onStats }: Props)
   const [category, setCategory] = useState('すべて')
   const [difficulty, setDifficulty] = useState('すべて')
   const [shuffle, setShuffle] = useState(false)
+  const [count, setCount] = useState<number>(10)
 
   return (
     <div className="screen">
@@ -55,6 +58,19 @@ export function StartScreen({ onStart, onGenerate, generating, onStats }: Props)
           ))}
         </div>
 
+        <p className="filter-label">出題数</p>
+        <div className="filter-buttons">
+          {COUNTS.map((c) => (
+            <button
+              key={c}
+              className={count === c ? 'active' : ''}
+              onClick={() => setCount(c)}
+            >
+              {c}問
+            </button>
+          ))}
+        </div>
+
         <label className="shuffle-label">
           <input
             type="checkbox"
@@ -65,7 +81,7 @@ export function StartScreen({ onStart, onGenerate, generating, onStats }: Props)
         </label>
       </div>
 
-      <button className="btn-primary" onClick={() => onStart({ category, difficulty, shuffle })}>
+      <button className="btn-primary" onClick={() => onStart({ category, difficulty, shuffle, count })}>
         既存の問題でスタート
       </button>
       <button onClick={onStats}>統計を見る</button>
