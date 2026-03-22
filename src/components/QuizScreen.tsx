@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Quiz } from '../types/quiz'
+import type { Quiz } from '../types/quiz'
 
 type Props = {
   quiz: Quiz
@@ -14,10 +14,12 @@ export function QuizScreen({ quiz, current, total, onAnswer }: Props) {
   const handleSelect = (option: string) => {
     if (selected) return
     setSelected(option)
-    setTimeout(() => {
-      onAnswer(option)
-      setSelected(null)
-    }, 1000)
+  }
+
+  const handleNext = () => {
+    if (!selected) return
+    onAnswer(selected)
+    setSelected(null)
   }
 
   const getButtonStyle = (option: string) => {
@@ -46,6 +48,11 @@ export function QuizScreen({ quiz, current, total, onAnswer }: Props) {
       </ul>
       {selected && quiz.explanation && (
         <p className="explanation">{quiz.explanation}</p>
+      )}
+      {selected && (
+        <button onClick={handleNext}>
+          {current === total ? '結果を見る' : '次へ'}
+        </button>
       )}
     </div>
   )
