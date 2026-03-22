@@ -96,6 +96,27 @@ button {
 
 .stat-summary {
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  .score {
+    font-size: 3rem;
+    font-weight: bold;
+    margin: 0;
+  }
+
+  .percentage {
+    font-size: 0.875rem;
+    color: #888;
+    margin: 0;
+  }
+}
+
+.stat-summary-count {
+  font-size: 0.875rem;
+  color: #999;
+  margin: 0;
 }
 
 .stat-section {
