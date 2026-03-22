@@ -49,7 +49,8 @@ Deno.serve(async (req) => {
     return new Response(JSON.stringify({ error: 'Unexpected response type' }), { status: 500 })
   }
 
-  const quizzes = JSON.parse(content.text)
+  const cleaned = content.text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim()
+  const quizzes = JSON.parse(cleaned)
 
   const { data, error } = await supabase.from('quizzes').insert(quizzes).select()
   if (error) {
