@@ -23,10 +23,13 @@ export function StartScreen({ onStart, onGenerate, generating, onStats }: Props)
 
   return (
     <div className="screen">
-      <h1>AWS DVA クイズ</h1>
+      <div className="screen-header">
+        <h1>AWS DVA クイズ</h1>
+        <p>AWS Developer Associate 試験対策</p>
+      </div>
 
       <div className="filter-section">
-        <p className="label">カテゴリ</p>
+        <p className="filter-label">カテゴリ</p>
         <div className="filter-buttons">
           {CATEGORIES.map((cat) => (
             <button
@@ -39,7 +42,7 @@ export function StartScreen({ onStart, onGenerate, generating, onStats }: Props)
           ))}
         </div>
 
-        <p className="label">難易度</p>
+        <p className="filter-label">難易度</p>
         <div className="filter-buttons">
           {DIFFICULTIES.map((d) => (
             <button
@@ -62,14 +65,13 @@ export function StartScreen({ onStart, onGenerate, generating, onStats }: Props)
         </label>
       </div>
 
-      <button onClick={() => onStart({ category, difficulty, shuffle })}>
+      <button className="btn-primary" onClick={() => onStart({ category, difficulty, shuffle })}>
         既存の問題でスタート
       </button>
       <button onClick={onStats}>統計を見る</button>
 
-      <div className="divider">または</div>
+      <div className="divider">AIで問題を生成</div>
 
-      <p className="label">AIでカテゴリを選んで問題を生成</p>
       <ul className="category-list">
         {CATEGORIES.filter((c) => c !== 'すべて').map((cat) => (
           <li key={cat}>

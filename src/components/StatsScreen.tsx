@@ -125,7 +125,7 @@ export function StatsScreen({ onBack }: Props) {
       ) : (
         <>
           <div className="filter-section">
-            <p className="label">カテゴリ</p>
+            <p className="filter-label">カテゴリ</p>
             <div className="filter-buttons">
               {CATEGORIES.map((cat) => (
                 <button key={cat} className={category === cat ? 'active' : ''} onClick={() => setCategory(cat)}>
@@ -133,7 +133,7 @@ export function StatsScreen({ onBack }: Props) {
                 </button>
               ))}
             </div>
-            <p className="label">難易度</p>
+            <p className="filter-label">難易度</p>
             <div className="filter-buttons">
               {DIFFICULTIES.map((d) => (
                 <button key={d} className={difficulty === d ? 'active' : ''} onClick={() => setDifficulty(d)}>
@@ -148,14 +148,14 @@ export function StatsScreen({ onBack }: Props) {
           ) : (
             <>
               <div className="stat-summary">
-                <p className="percentage">総合正答率</p>
-                <p className="score">{Math.round((totalCorrect / totalCount) * 100)}%</p>
+                <p className="stat-summary-label">総合正答率</p>
+                <p className="stat-summary-rate">{Math.round((totalCorrect / totalCount) * 100)}%</p>
                 <p className="stat-summary-count">{totalCount}問中 {totalCorrect}問正解</p>
               </div>
 
               {category === 'すべて' && (
                 <div className="stat-section">
-                  <h2>カテゴリ別</h2>
+                  <p className="stat-section-title">カテゴリ別</p>
                   {categoryStats.map((s) => (
                     <div key={s.label} className="stat-row">
                       <span className="stat-label">{s.label}</span>
@@ -169,7 +169,7 @@ export function StatsScreen({ onBack }: Props) {
 
               {difficulty === 'すべて' && (
                 <div className="stat-section">
-                  <h2>難易度別</h2>
+                  <p className="stat-section-title">難易度別</p>
                   {difficultyStats.map((s) => (
                     <div key={s.label} className="stat-row">
                       <span className="stat-label">{s.label}</span>
@@ -182,7 +182,7 @@ export function StatsScreen({ onBack }: Props) {
               )}
 
               <div className="stat-section">
-                <h2>問題別（正答率の低い順）</h2>
+                <p className="stat-section-title">問題別（正答率の低い順）</p>
                 {quizStats.map((s) => (
                   <div key={s.quiz_id} className="stat-quiz-row">
                     <div className="stat-quiz-header">

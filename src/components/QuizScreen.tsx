@@ -29,11 +29,24 @@ export function QuizScreen({ quiz, current, total, onAnswer }: Props) {
     return ''
   }
 
+  const progressPct = Math.round(((current - 1) / total) * 100)
+
   return (
     <div className="screen">
-      <p className="progress">{current} / {total}</p>
-      <p className="category">{quiz.category} · {quiz.difficulty}</p>
-      <h2>{quiz.question}</h2>
+      <div className="quiz-progress">
+        <div className="quiz-progress-text">
+          <span>問題 {current} / {total}</span>
+          <span>{progressPct}%</span>
+        </div>
+        <div className="quiz-progress-bar-wrap">
+          <div className="quiz-progress-bar" style={{ width: `${progressPct}%` }} />
+        </div>
+      </div>
+
+      <p className="quiz-meta">{quiz.category} · {quiz.difficulty}</p>
+
+      <p className="quiz-question">{quiz.question}</p>
+
       <ul className="options">
         {quiz.options.map((option) => (
           <li key={option}>
@@ -46,12 +59,14 @@ export function QuizScreen({ quiz, current, total, onAnswer }: Props) {
           </li>
         ))}
       </ul>
+
       {selected && quiz.explanation && (
         <p className="explanation">{quiz.explanation}</p>
       )}
+
       {selected && (
-        <button onClick={handleNext}>
-          {current === total ? '結果を見る' : '次へ'}
+        <button className="btn-primary" onClick={handleNext}>
+          {current === total ? '結果を見る →' : '次へ →'}
         </button>
       )}
     </div>
