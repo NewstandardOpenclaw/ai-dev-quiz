@@ -17,8 +17,39 @@ type RawResult = {
   is_correct: boolean
 }
 
-const CATEGORIES = ['すべて', 'S3', 'Lambda', 'DynamoDB', 'SQS', 'SNS', 'API Gateway', 'EC2', 'IAM']
+const CATEGORIES = [
+  'すべて',
+  'S3', 'Lambda', 'DynamoDB', 'SQS', 'SNS', 'API Gateway', 'EC2', 'IAM',
+  'Kinesis', 'EventBridge', 'Cognito', 'KMS', 'Secrets Manager',
+  'CloudWatch', 'X-Ray',
+  'CodeCommit', 'CodeBuild', 'CodeDeploy', 'CodePipeline',
+  'Elastic Beanstalk', 'CloudFormation', 'SAM',
+  'ECS', 'ECR', 'Step Functions', 'ElastiCache',
+]
 const DIFFICULTIES = ['すべて', 'easy', 'medium', 'hard']
+
+const DOMAINS = [
+  {
+    name: 'AWSサービスを使った開発',
+    weight: 32,
+    categories: ['Lambda', 'S3', 'DynamoDB', 'SQS', 'SNS', 'API Gateway', 'Kinesis', 'EventBridge', 'Step Functions', 'Cognito', 'ECS', 'ECR', 'ElastiCache'],
+  },
+  {
+    name: 'セキュリティ',
+    weight: 26,
+    categories: ['IAM', 'KMS', 'Secrets Manager', 'Cognito'],
+  },
+  {
+    name: 'デプロイメント',
+    weight: 24,
+    categories: ['Elastic Beanstalk', 'CloudFormation', 'SAM', 'CodeCommit', 'CodeBuild', 'CodeDeploy', 'CodePipeline', 'ECS', 'ECR', 'EC2'],
+  },
+  {
+    name: 'トラブルシューティングと最適化',
+    weight: 18,
+    categories: ['CloudWatch', 'X-Ray'],
+  },
+]
 
 type Props = {
   onBack: () => void
@@ -178,6 +209,45 @@ export function StatsScreen({ onBack }: Props) {
                       <span className="stat-count">{s.correct}/{s.total}</span>
                     </div>
                   ))}
+                </div>
+              )}
+
+              {category === 'すべて' && (
+                <div className="stat-section">
+                  <p className="stat-section-title">DVA試験ドメイン別（出題比率）</p>
+                  {DOMAINS.map((domain) => {
+                    const domainResults = filtered.filter((r) => domain.categories.includes(r.category))
+                    const domainTotal = domainResults.length
+                    const domainCorrect = domainResults.filter((r) => r.is_correct).length
+                    const domainRate = domainTotal > 0 ? Math.round((domainCorrect / domainTotal) * 100) : null
+                    return (
+                      <div key={domain.name} className="stat-domain-row">
+                        <div className="stat-domain-header">
+                          <span className="stat-label">{domain.name}</span>
+                          <span className="stat-domain-weight">試験比率 {domain.weight}%</span>
+                        </div>
+                        {domainRate !== null ? (
+                          <>
+                            <div className="stat-domain-bars">
+                              <div className="stat-domain-bar-item">
+                                <span className="stat-domain-bar-label">正答率</span>
+                                <div className="stat-bar-wrap"><div className="stat-bar" style={{ width: `${domainRate}%` }} /></div>
+                                <span className="stat-rate">{domainRate}%</span>
+                                <span className="stat-count">{domainCorrect}/{domainTotal}</span>
+                              </div>
+                              <div className="stat-domain-bar-item">
+                                <span className="stat-domain-bar-label">出題比率</span>
+                                <div className="stat-bar-wrap"><div className="stat-bar stat-bar-accent" style={{ width: `${domain.weight}%` }} /></div>
+                                <span className="stat-rate">{domain.weight}%</span>
+                              </div>
+                            </div>
+                          </>
+                        ) : (
+                          <p className="stat-domain-empty">未回答</p>
+                        )}
+                      </div>
+                    )
+                  })}
                 </div>
               )}
 

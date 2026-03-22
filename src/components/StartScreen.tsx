@@ -1,6 +1,14 @@
 import { useState } from 'react'
 
-const CATEGORIES = ['すべて', 'S3', 'Lambda', 'DynamoDB', 'SQS', 'SNS', 'API Gateway', 'EC2', 'IAM']
+const CATEGORIES = [
+  'すべて',
+  'S3', 'Lambda', 'DynamoDB', 'SQS', 'SNS', 'API Gateway', 'EC2', 'IAM',
+  'Kinesis', 'EventBridge', 'Cognito', 'KMS', 'Secrets Manager',
+  'CloudWatch', 'X-Ray',
+  'CodeCommit', 'CodeBuild', 'CodeDeploy', 'CodePipeline',
+  'Elastic Beanstalk', 'CloudFormation', 'SAM',
+  'ECS', 'ECR', 'Step Functions', 'ElastiCache',
+]
 const DIFFICULTIES = ['すべて', 'easy', 'medium', 'hard'] as const
 const COUNTS = [1, 2, 3, 5, 10, 20, 30] as const
 
@@ -88,7 +96,7 @@ export function StartScreen({ onStart, onGenerate, generating, onStats }: Props)
 
       <div className="divider">AIで問題を生成</div>
 
-      <ul className="category-list">
+      <ul className="category-list" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
         {CATEGORIES.filter((c) => c !== 'すべて').map((cat) => (
           <li key={cat}>
             <button onClick={() => onGenerate(cat)} disabled={generating}>
